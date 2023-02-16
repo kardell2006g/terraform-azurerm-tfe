@@ -1,0 +1,52 @@
+# --- Common --- #
+location             = "East US"
+friendly_name_prefix = "cloudteam"
+common_tags = {
+  "App"       = "TFE"
+  "Env"       = "test"
+  "Terraform" = "cli"
+  "Owner"     = "YourName"
+}
+
+# --- Prereqs --- #
+vnet_id      = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet"
+vm_subnet_id = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-vm-subnet"
+db_subnet_id = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-db-subnet"
+
+bootstrap_sa_name = "mytfebootstrapsa"
+bootstrap_sa_rg   = "tfe-prereqs-rg"
+tfe_license_path  = "bootstrap/tfe-license.rli"
+
+bootstrap_kv_name      = "my-tfe-bootstrap-kv"
+bootstrap_kv_rg        = "tfe-prereqs-rg"
+tfe_cert_kv_id         = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe-cert/00000000000000000000000000000000"
+tfe_privkey_kv_id      = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe-privkey/11111111111111111111111111111111"
+console_password_kv_id = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/console-password/22222222222222222222222222222222"
+enc_password_kv_id     = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/enc-password/33333333333333333333333333333333"
+
+# --- TFE Config --- #
+tfe_release_sequence = 660
+tfe_fqdn             = "my-tfe.azure.example.com"
+azure_use_msi        = true
+
+# --- Networking --- #
+availability_zones    = ["1", "2", "3"]
+load_balancing_scheme = "external"
+create_dns_record     = true
+dns_zone_name         = "azure.example.com"
+dns_zone_rg           = "tfe-prereqs-rg"
+
+# --- Compute --- #
+vm_ssh_public_key = "ssh-rsa ThisIsMySSHPublicKey== someone@example-abcdefg1234567"
+
+# --- PostgreSQL --- #
+postgres_password                     = "Postgr3sPassw0rd!"
+enable_postgres_ha                    = true
+postgres_geo_redundant_backup_enabled = true #if supported in Azure region
+
+# --- Blob Storage --- #
+storage_account_cidr_allow = ["1.2.3.4"]
+
+# --- Active/Active --- #
+enable_active_active = false
+redis_subnet_id      = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-vm-subnet"

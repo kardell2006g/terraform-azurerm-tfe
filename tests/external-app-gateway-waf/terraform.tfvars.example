@@ -1,0 +1,79 @@
+# --- Common --- #
+location             = "East US"
+friendly_name_prefix = "CloudTeam"
+common_tags = {
+  "App"       = "TFE"
+  "Env"       = "test"
+  "Terraform" = "cli"
+  "Owner"     = "YourName"
+}
+
+# --- Prereqs --- #
+vnet_id      = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet"
+vm_subnet_id = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vm-subnet"
+db_subnet_id = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-db-subnet"
+lb_subnet_id = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-lb-subnet"
+
+bootstrap_sa_name       = "mytfebootstrapsa"
+bootstrap_sa_rg         = "tfe-prereqs-rg"
+tfe_license_path        = "bootstrap/tfe-license.rli"
+replicated_tarball_path = "bootstrap/replicated-2.54.0.tar.gz"
+tfe_airgap_bundle_path  = "bootstrap/TFE-659.airgap"
+
+bootstrap_kv_name      = "my-tfe-bootstrap-kv"
+bootstrap_kv_rg        = "tfe-prereqs-rg"
+tfe_cert_kv_id         = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe--fullchain-cert/00000000000000000000000000000000"
+tfe_privkey_kv_id      = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe-privkey/11111111111111111111111111111111"
+ca_bundle_kv_id        = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe-ca-bundle/2222222222222222222222222222222"
+console_password_kv_id = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/console-password/3333333333333333333333333333"
+enc_password_kv_id     = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/enc-password/44444444444444444444444444444444"
+
+
+# --- TFE Config --- #
+tfe_fqdn = "my-tfe.azure.example.com"
+
+# --- Networking --- #
+availability_zones                                  = ["1", "2", "3"]
+load_balancing_scheme                               = "external"
+load_balancer_type                                  = "application_gateway"
+app_gw_enable_http2                                 = "true"
+app_gw_sku_name                                     = "WAF_v2"
+app_gw_sku_tier                                     = "WAF_v2"
+app_gw_sku_capacity                                 = "1"
+app_gw_request_routing_rule_minimum_priority        = 1000
+app_gw_waf_file_upload_limit_mb                     = 100
+app_gw_firewall_mode                                = "Prevention"
+app_gw_waf_rule_set_version                         = "3.1"
+app_gw_private_ip                                   = "10.0.1.123"
+lb_subnet_cidr                                      = "10.0.1.0/24"
+
+certificate = {
+  key_vault_id = "/subscriptions/000000000000000000000000/resourceGroups/tfe-prereqs-rg/providers/Microsoft.KeyVault/vaults/tfe-fullchain-pfx-cert"
+  name         = "tfe-full-chain-pfx-cert"
+  secret_id    = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe-full-chain-pfx-cert/11111111111111111111111111111111"
+}
+
+ca_certificate_secret = {
+  name  = "tfe-root-ca-cert"
+  value = <<EOF
+  "-----BEGIN CERTIFICATE-----
+...abcdefghijklmnopqrstuvwxyz123456
+789123456abcdefghijklmnospqrstuv...
+-----END CERTIFICATE-----"
+EOF
+}
+
+create_dns_record = true
+dns_zone_name         = "azure.example.com"
+dns_zone_rg           = "tfe-prereqs-rg"
+
+# --- Compute --- #
+vm_ssh_public_key = "ssh-rsa ThisIsMySSHPublicKey== someone@example-abcdefg1234567"
+
+# --- PostgreSQL --- #
+postgres_password                     = "Postgr3sPassw0rd!"
+enable_postgres_ha                    = true #if supported in Azure region
+postgres_geo_redundant_backup_enabled = true 
+
+# --- Blob Storage --- #
+storage_account_cidr_allow = ["1.2.3.4"]

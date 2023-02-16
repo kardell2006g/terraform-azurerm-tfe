@@ -1,0 +1,54 @@
+# --- Common --- #
+location             = "East US"
+friendly_name_prefix = "cloudteam"
+common_tags = {
+  "App"       = "TFE"
+  "Env"       = "test"
+  "Terraform" = "cli"
+  "Owner"     = "YourName"
+}
+
+# --- Prereqs --- #
+vnet_id      = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-secondary-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet"
+vm_subnet_id = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-secondary-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-vm-subnet"
+db_subnet_id = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-secondary-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-db-subnet"
+
+bootstrap_sa_name = "mytfebootstrapsa"
+bootstrap_sa_rg   = "tfe-prereqs-secondary-rg"
+tfe_license_path  = "bootstrap/tfe-license.rli"
+
+bootstrap_kv_name      = "my-tfe-bootstrap-kv"
+bootstrap_kv_rg        = "tfe-prereqs-rg"
+tfe_cert_kv_id         = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe-cert/00000000000000000000000000000000"
+tfe_privkey_kv_id      = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/tfe-privkey/11111111111111111111111111111111"
+console_password_kv_id = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/console-password/22222222222222222222222222222222"
+enc_password_kv_id     = "https://my-tfe-bootstrap-kv.vault.azure.net/secrets/enc-password/33333333333333333333333333333333"
+
+# --- Secondary --- #
+is_secondary_region             = true
+tfe_resource_group_name_primary = "cloudteam-tfe-rg"
+storage_account_name_primary    = "cloudteamtfeblob"
+storage_container_name_primary  = "tfeblob"
+
+# --- TFE Config --- #
+tfe_release_sequence = 660
+tfe_fqdn             = "my-tfe.azure.example.com"
+
+# --- Networking --- #
+availability_zones    = ["1", "2", "3"]
+load_balancing_scheme = "external"
+create_dns_record     = true
+dns_zone_name         = "azure.example.com"
+dns_zone_rg           = "tfe-prereqs-primary-rg"
+
+# --- Compute --- #
+vm_ssh_public_key = "ssh-rsa ThisIsMySSHPublicKey== someone@example-abcdefg1234567"
+
+# --- PostgreSQL --- #
+postgres_password                     = "Postgr3sPassw0rd!"
+enable_postgres_ha                    = true #if supported in Azure region
+postgres_geo_redundant_backup_enabled = true 
+
+# --- Blob Storage --- #
+storage_account_cidr_allow = ["1.2.3.4"]
+account_replication_type = "RAGZRS"

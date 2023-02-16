@@ -1,0 +1,60 @@
+# --- Common --- #
+location             = "East US"
+friendly_name_prefix = "cloudteam"
+common_tags = {
+  "App"       = "TFE"
+  "Env"       = "test"
+  "Terraform" = "cli"
+  "Owner"     = "YourName"
+}
+
+# --- Prereqs --- #
+vnet_id       = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet"
+lb_subnet_id  = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-lb-subnet"
+vm_subnet_id  = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-vm-subnet"
+db_subnet_id  = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-db-subnet"
+lb_private_ip = "10.0.1.10"
+
+bootstrap_sa_name       = "tfebootstrapsa"
+bootstrap_sa_rg         = "tfe-prereqs-rg"
+tfe_license_path        = "bootstrap/tfe-license.rli"
+tfe_airgap_bundle_path  = "bootstrap/tfe-660.airgap"
+replicated_tarball_path = "bootstrap/replicated.tar.gz"
+
+bootstrap_kv_name      = "tfe-bootstrap-kv"
+bootstrap_kv_rg        = "tfe-prereqs-rg"
+tfe_cert_kv_id         = "https://tfe-bootstrap-kv.vault.azure.net/secrets/tfe-cert/abcdefghijklmnopqrstuvwxyz123456789"
+tfe_privkey_kv_id      = "https://tfe-bootstrap-kv.vault.azure.net/secrets/tfe-privkey/abcdefghijklmnopqrstuvwxyz123456789"
+console_password_kv_id = "https://tfe-bootstrap-kv.vault.azure.net/secrets/console-password/abcdefghijklmnopqrstuvwxyz123456789"
+enc_password_kv_id     = "https://tfe-bootstrap-kv.vault.azure.net/secrets/enc-password/abcdefghijklmnopqrstuvwxyz123456789"
+ca_bundle_kv_id        = "https://tfe-bootstrap-kv.vault.azure.net/secrets/ca-bundle/abcdefghijklmnopqrstuvwxyz123456789"
+
+# --- TFE Config --- #
+airgap_install                  = true
+pkg_repos_reachable_with_airgap = true # assumes VM has outbound Internet connectivity
+tfe_fqdn                        = "tfe.azure.example.com"
+
+# --- Networking --- #
+availability_zones    = ["1", "2", "3"]
+load_balancing_scheme = "internal"
+create_dns_record     = true
+dns_zone_name         = "azure.example.com"
+dns_zone_rg           = "tfe-prereqs-rg"
+
+# --- VMSS --- #
+vm_count             = 1
+vm_ssh_public_key    = "ssh-rsa ThisIsMySSHPublicKey== someone@example-abcdefg1234567"
+custom_vm_image_name = "custom-rhel-8-4"
+custom_vm_image_rg   = "tfe-prereqs-rg"
+
+# --- PostgreSQL --- #
+postgres_password                     = "Postgr3sPassw0rd!"
+enable_postgres_ha                    = true
+postgres_geo_redundant_backup_enabled = true #if supported in Azure region
+
+# --- Blob Storage --- #
+storage_account_cidr_allow = ["1.2.3.4"]
+
+# --- Active/Active --- #
+enable_active_active = false
+redis_subnet_id      = "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/tfe-prereqs-rg/providers/Microsoft.Network/virtualNetworks/tfe-vnet/subnets/tfe-vm-subnet"
